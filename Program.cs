@@ -1,22 +1,43 @@
-﻿using BotFramework.Bot;
+﻿using BFTemplate.Services;
+using BotFramework;
+using BotFramework.Abstractions;
+using BotFramework.Clients;
+using BotFramework.HostServices;
+using BotFramework.Middleware;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Events;
+using Telegram.Bot;
 
 namespace BFTemplate
 {
-    class Program
+    internal static class Program
     {
-        static void Main()
+        private static void Main()
         {
-            new BotBuilder()
-            .UseAssembly(typeof(Program).Assembly)
-            .WithName("EchoBot")
-            .WithToken("<YOURTOKEN>")
-            .UseLogger(new LoggerConfiguration()
-                       .MinimumLevel.Debug()
-                       .WriteTo.Console()
-                       .CreateLogger())
-            .Build()
-            .Run();
+            using var host = Host.CreateDefaultBuilder()
+                .UseConfigurationWithEnvironment()
+                .UseSerilog((context, configuration) =>
+                {
+                    configuration
+                        .MinimumLevel.Debug()
+                        .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                        .Enrich.FromLogContext()
+                        .WriteTo.Console();
+                })
+                .ConfigureApp((app, context) =>
+                {
+                    app.Services.AddSingleton<ITelegramBotClient>(_ => new TelegramBotClient(context.Configuration["BotToken"]));
+                    app.Services.AddTransient<IUpdateConsumer, Client>();
+                    app.Services.AddDbContext<TelegramContext>();
+
+                    app.UseMiddleware<LoggingMiddleware>();
+                    app.UseHandlers();
+                    app.UseStaticCommands();
+                })
+                .Build()
+                .RunAsync();
         }
     }
 }
@@ -32,7 +53,5 @@ namespace BFTemplate
  * Packages
  * dotnet add package Microsoft.EntityFrameworkCore.Tools
  * dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
- * dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL.Design
- *
- *  
+ * dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL.Design  
  */

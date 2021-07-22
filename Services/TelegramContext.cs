@@ -1,7 +1,7 @@
 ﻿using BFTemplate.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace BFTemplate.Database
+namespace BFTemplate.Services
 {
     public class TelegramContext : DbContext
     {

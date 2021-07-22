@@ -1,18 +1,21 @@
-﻿using BotFramework.Bot;
-using BotFramework.Commands;
-using BotFramework.Responses;
+﻿using System.Threading.Tasks;
+using BotFramework.Abstractions;
+using BotFramework.Clients.ClientExtensions;
 using Telegram.Bot.Types;
 
 namespace BFTemplate.Commands
 {
-    [StaticCommand]
-    public class EchoCommand : MessageCommand
+    public class EchoCommand : IStaticCommand
     {
-        public override Response Execute(Message message, Client client)
+        public async Task Execute(IClient client)
         {
-            return new Response().AddMessage(new TextMessage(message.Chat.Id, message.Text));
+            var message = await client.GetTextMessage();
+            await client.SendTextMessage(message.Text);
         }
 
-        public override bool Suitable(Message message) => true;
+        public bool SuitableFirst(Update update)
+        {
+            return true;
+        }
     }
 }
