@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Askold Makaruk",
+  "classifications": [ "Telegram Bot", "BotFramework" ],
+  "identity": "BFTemplate",
+  "name": "Starting boilerplate for telegram bots",
+  "shortName": "bf-bot",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "BFTemplate",
+  "preferNameDirectory":true
+}
