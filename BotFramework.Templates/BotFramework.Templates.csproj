@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <LangVersion>10</LangVersion>
+        <Nullable>enable</Nullable>
+        <PackageType>Template</PackageType>
+        <PackageVersion>1.1</PackageVersion>
+        <PackageId>BotFramework.Templates</PackageId>
+        <Title>BFTemplate</Title>
+        <Authors>Askold Makaruk</Authors>
+        <Description>Template for creating telegram bots with BotFramework</Description>
+        <PackageTags>dotnet-new;templates;contoso</PackageTags>
+        <IncludeContentInPack>true</IncludeContentInPack>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <ContentTargetFolders>content</ContentTargetFolders>
+        <NoWarn>$(NoWarn);NU5128</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**" />
+        <Compile Remove="**\*" />
+    </ItemGroup>    
+</Project>
