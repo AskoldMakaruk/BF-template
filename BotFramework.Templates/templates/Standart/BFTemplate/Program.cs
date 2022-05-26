@@ -10,7 +10,7 @@ using Serilog.Events;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-var hostBuilder = Host.CreateDefaultBuilder()
+var host = Host.CreateDefaultBuilder()
     .UseConfigurationWithEnvironment()
     .UseSerilog((context, configuration) =>
     {
@@ -20,22 +20,19 @@ var hostBuilder = Host.CreateDefaultBuilder()
             .Enrich.FromLogContext()
             .WriteTo.Console();
     })
-    .UseSimpleBotFramework();
-
-
-hostBuilder.ConfigureAppConfiguration((hostingContext, config) =>
-{
-    var env = hostingContext.HostingEnvironment;
-    Console.WriteLine(env.EnvironmentName);
-});
-
-var host = hostBuilder.Build();
+    .UseSimpleBotFramework()
+    .ConfigureAppConfiguration((hostingContext, config) =>
+    {
+        var env = hostingContext.HostingEnvironment;
+        Console.WriteLine(env.EnvironmentName);
+    });
+    .Build(Startup.Configure);
 
 var context = host.Services.GetService<TelegramContext>()!;
 context.Database.Migrate();
 
 var bot = host.Services.GetService<ITelegramBotClient>()!;
-bot.SetMyCommandsAsync(new List<BotCommand>
+await bot.SetMyCommandsAsync(new List<BotCommand>
 {
     new()
     {
@@ -43,7 +40,6 @@ bot.SetMyCommandsAsync(new List<BotCommand>
         Description = "старт ураа!"
     },
 });
-
 
 host.Run();
 

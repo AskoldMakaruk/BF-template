@@ -8,8 +8,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="BotFramework" Version="1.0.0-alpha-67" />
-    <PackageReference Include="BotFramework.Identity" Version="1.0.0-alpha-67" />
+    <PackageReference Include="BotFramework" Version="1.0.0-alpha-76" />    
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
       <PrivateAssets>all</PrivateAssets>
